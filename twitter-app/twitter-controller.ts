@@ -1,7 +1,8 @@
 const Twitter = require('twitter');
 const Pusher = require('pusher');
 const PusherClient = require('pusher-client');
-const TinyURL = require('tinyurl');
+const request = require('request');
+//import gcm = require("node-gcm");
 
 export class TwitterController {
 
@@ -33,6 +34,34 @@ export class TwitterController {
                         console.log(error);
                     }
                 });
+
+                let formData = {
+                    "tokens": [""],
+                    "profile": "ios",
+                    "notification": {
+                        "message": fact.text
+                    },
+                    "send_to_all":true
+                };
+
+                // Set the headers
+                var headers = {
+                    'Authorization':'Bearer ' + process.env.IONIC_APP_TOKEN,
+                    'Content-Type':'application/json'
+                }
+
+                // Configure the request
+                var options = {
+                    url: 'https://api.ionic.io/push/notifications',
+                    method: 'POST',
+                    headers: headers,
+                    body: formData,
+                    json:true
+                }
+
+                // Start the request
+                request(options, function (error, response, body) {
+                })
             }
         );
 
